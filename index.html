@@ -81,18 +81,18 @@
     <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-grow w-full space-y-6">
 
         <!-- Navigation Tabs -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-2 rounded-2xl shadow-sm border border-gray-200">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-2.5 rounded-2xl shadow-sm border border-gray-200">
             <button id="tabBtnEMR" onclick="switchTab('emr')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
-                📂 Daftar Rekam Medis Pasien
+                📂 Daftar Rekam Medis
             </button>
-            <button id="tabBtnSOAP" onclick="switchTab('soap')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+            <button id="tabBtnSOAP" onclick="switchTab('soap')" class="py-2.5 text-xs font-bold rounded-xl transition bg-rose-700 text-white shadow">
                 📝 Form CPPT / SOAP Rinci
             </button>
-            <button id="tabBtnScore" onclick="switchTab('score')" class="py-2.5 text-xs font-bold rounded-xl transition bg-rose-700 text-white shadow" id="scoreTabBtn">
-                🧮 Calculator & Clinical Scores
+            <button id="tabBtnScore" onclick="switchTab('score')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+                🧮 Calculator Scores
             </button>
             <button id="tabBtnTask" onclick="switchTab('task')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
-                📌 Tugas Stase & Schedule
+                📌 Tugas Stase
             </button>
         </div>
 
@@ -107,8 +107,8 @@
             </div>
         </section>
 
-        <!-- TAB 2: SOAP -->
-        <section id="tabSOAP" class="space-y-6 hidden">
+        <!-- TAB 2: SOAP (Default Terbuka) -->
+        <section id="tabSOAP" class="space-y-6">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
                 <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border">A. IDENTITAS & SOAP PASIEN</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -131,7 +131,7 @@
                     <div><label class="block font-bold mb-1">A (Assessment)</label><textarea id="valA" rows="2" placeholder="Diagnosis..." class="w-full bg-gray-50 border rounded-xl p-2.5"></textarea></div>
                     <div><label class="block font-bold mb-1">P (Plan)</label><textarea id="valP" rows="2" placeholder="Terapi..." class="w-full bg-gray-50 border rounded-xl p-2.5"></textarea></div>
                 </div>
-                <button onclick="generateWAReport()" class="w-full py-3 bg-rose-700 text-white font-bold text-xs rounded-xl shadow" id="soapBtn">📤 Generate Laporan WhatsApp</button>
+                <button onclick="generateWAReport()" class="w-full py-3 bg-rose-700 text-white font-bold text-xs rounded-xl shadow">📤 Generate Laporan WhatsApp</button>
             </div>
             <div id="outputContainer" class="bg-white rounded-2xl shadow-sm border p-5 hidden">
                 <textarea id="outputWA" rows="8" readonly class="w-full text-xs font-mono bg-gray-50 border rounded-xl p-3"></textarea>
@@ -139,11 +139,11 @@
         </section>
 
         <!-- TAB 3: CLINICAL SCORES -->
-        <section id="tabScore" class="space-y-4">
+        <section id="tabScore" class="space-y-4 hidden">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b">
                     <h2 class="text-base font-bold text-gray-900">🧮 Calculator & Clinical Scores (<span id="scoreStaseTitle">Penyakit Dalam (IPD)</span>)</h2>
-                    <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border" id="scoreBadge">16 Stase Aktif</span>
+                    <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border">16 Stase Aktif</span>
                 </div>
                 <div id="scoreCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
@@ -155,7 +155,7 @@
                 <h2 class="text-base font-bold text-gray-900 mb-3">📌 Daftar Tugas Stase</h2>
                 <div class="flex gap-2 mb-4">
                     <input type="text" id="newTaskInput" placeholder="Tambah tugas baru..." class="flex-1 text-xs bg-gray-50 border rounded-xl px-3 py-2.5">
-                    <button onclick="addTask()" class="bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl" id="taskAddBtn">Tambah</button>
+                    <button onclick="addTask()" class="bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl">Tambah</button>
                 </div>
                 <ul id="taskList" class="space-y-2"></ul>
             </div>
@@ -163,7 +163,7 @@
 
     </main>
 
-    <!-- MODAL KALKULATOR SKOR MEDIS SPESIFIK -->
+    <!-- MODAL KALKULATOR SKOR MEDIS -->
     <div id="calcModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border overflow-hidden flex flex-col max-h-[90vh]">
             <div class="bg-rose-700 text-white p-4 flex justify-between items-center" id="modalHeader">
@@ -208,7 +208,6 @@
             currentStase = document.getElementById('staseSelector').value;
             const data = staseMaster[currentStase];
             
-            // Ubah Tema Warna Header & Tombol sesuai Stase
             const header = document.getElementById('mainHeader');
             header.className = `bg-gradient-to-r ${data.color} text-white shadow-lg border-b-4 border-white/30 transition-all duration-300`;
 
@@ -262,34 +261,6 @@
                     <div><label class="font-semibold">Verbal (Suara):</label><select id="gV" onchange="calcGCS()" class="w-full bg-gray-50 border rounded p-2"><option value="5">5 - Baik</option><option value="3">3 - Kacau</option><option value="1">1 - Tidak ada</option></select></div>
                     <div><label class="font-semibold">Motorik (Gerak):</label><select id="gM" onchange="calcGCS()" class="w-full bg-gray-50 border rounded p-2"><option value="6">6 - Patuh</option><option value="4">4 - Menghindar</option><option value="2">2 - Ekstensi</option><option value="1">1 - Tidak ada</option></select></div>`;
                 calcGCS();
-            } else if (scoreName === 'APACHE II') {
-                body.innerHTML = `
-                    <div><label class="font-semibold">Usia Pasien:</label><select id="ap1" onchange="calcAPACHE()" class="w-full bg-gray-50 border rounded p-2"><option value="0">< 44 tahun (0)</option><option value="2">45-54 tahun (2)</option><option value="5">65-74 tahun (5)</option><option value="6">> 75 tahun (6)</option></select></div>
-                    <div><label class="font-semibold">Suhu Tubuh & TTV Akut:</label><select id="ap2" onchange="calcAPACHE()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Normal (0)</option><option value="3">Demam / Hipotermia Ringan (3)</option><option value="4">Gangguan Hemodinamik Berat (4)</option></select></div>`;
-                calcAPACHE();
-            } else if (scoreName === 'CURB-65') {
-                body.innerHTML = `
-                    <div><label class="font-semibold">C - Confusion (Bingung):</label><select id="cb1" onchange="calcCURB()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">U - Ureum > 7 mmol/L:</label><select id="cb2" onchange="calcCURB()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">R - Respirasi >= 30x/m:</label><select id="cb3" onchange="calcCURB()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">B - Blood Pressure (TD Sistol < 90):</label><select id="cb4" onchange="calcCURB()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">65 - Usia >= 65 Tahun:</label><select id="cb5" onchange="calcCURB()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>`;
-                calcCURB();
-            } else if (scoreName === 'CHA₂DS₂-VASc') {
-                body.innerHTML = `
-                    <div><label class="font-semibold">C - Gagal Jantung / CHF:</label><select id="ch1" onchange="calcCHAD()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">H - Hipertensi:</label><select id="ch2" onchange="calcCHAD()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">A2 - Usia >= 75 Tahun:</label><select id="ch3" onchange="calcCHAD()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="2">Ya (2)</option></select></div>
-                    <div><label class="font-semibold">D - Diabetes Melitus:</label><select id="ch4" onchange="calcCHAD()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">S2 - Riwayat Stroke / TIA:</label><select id="ch5" onchange="calcCHAD()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="2">Ya (2)</option></select></div>`;
-                calcCHAD();
-            } else if (scoreName === 'HAS-BLED') {
-                body.innerHTML = `
-                    <div><label class="font-semibold">H - Hipertensi Tidak Terkontrol:</label><select id="hb1" onchange="calcHAS()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">A - Abnormal Renal / Liver Function:</label><select id="hb2" onchange="calcHAS()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Normal (0)</option><option value="1">Kelainan (1-2)</option></select></div>
-                    <div><label class="font-semibold">S - Stroke History:</label><select id="hb3" onchange="calcHAS()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>
-                    <div><label class="font-semibold">B - Bleeding History (Perdarahan):</label><select id="hb4" onchange="calcHAS()" class="w-full bg-gray-50 border rounded p-2"><option value="0">Tidak (0)</option><option value="1">Ya (1)</option></select></div>`;
-                calcHAS();
             } else {
                 body.innerHTML = `
                     <p class="text-gray-600 mb-2">Evaluasi parameter klinis untuk <strong>${scoreName}</strong>:</p>
@@ -306,28 +277,13 @@
             let t = parseInt(document.getElementById('gE').value) + parseInt(document.getElementById('gV').value) + parseInt(document.getElementById('gM').value);
             document.getElementById('modalScoreResult').innerText = `GCS: ${t} (${t===15?'Compos Mentis':'Penurunan Kesadaran'})`;
         }
-        function calcAPACHE() {
-            let t = parseInt(document.getElementById('ap1').value) + parseInt(document.getElementById('ap2').value);
-            document.getElementById('modalScoreResult').innerText = `Skor APACHE II: ${t} (${t>15?'Risiko Tinggi':'Risiko Sedang'})`;
-        }
-        function calcCURB() {
-            let t = parseInt(document.getElementById('cb1').value) + parseInt(document.getElementById('cb2').value) + parseInt(document.getElementById('cb3').value) + parseInt(document.getElementById('cb4').value) + parseInt(document.getElementById('cb5').value);
-            document.getElementById('modalScoreResult').innerText = `Skor CURB-65: ${t} (${t>=2?'Rawat Inap / ICU Disarankan':'Rawat Jalan Aman'})`;
-        }
-        function calcCHAD() {
-            let t = parseInt(document.getElementById('ch1').value) + parseInt(document.getElementById('ch2').value) + parseInt(document.getElementById('ch3').value) + parseInt(document.getElementById('ch4').value) + parseInt(document.getElementById('ch5').value);
-            document.getElementById('modalScoreResult').innerText = `Skor CHA2DS2-VASc: ${t} (${t>=2?'Indikasi Antikoagulasi Oral':'Risiko Rendah'})`;
-        }
-        function calcHAS() {
-            let t = parseInt(document.getElementById('hb1').value) + parseInt(document.getElementById('hb2').value) + parseInt(document.getElementById('hb3').value) + parseInt(document.getElementById('hb4').value);
-            document.getElementById('modalScoreResult').innerText = `Skor HAS-BLED: ${t} (${t>=3?'Risiko Perdarahan Tinggi':'Risiko Rendah'})`;
-        }
         function calcGen(name) {
             let v = document.getElementById('genVal').value;
             document.getElementById('modalScoreResult').innerText = `Hasil ${name}: ${v}`;
         }
 
         function closeModal() { document.getElementById('calcModal').classList.add('hidden'); }
+        
         function switchTab(t) {
             ['EMR','SOAP','Score','Task'].forEach(id => {
                 document.getElementById('tab'+id).classList.add('hidden');
@@ -336,6 +292,7 @@
             document.getElementById('tab'+t).classList.remove('hidden');
             document.getElementById('tabBtn'+t).className = "py-2.5 text-xs font-bold rounded-xl transition bg-rose-700 text-white shadow";
         }
+
         function generateWAReport() {
             let r = `*LAPORAN CPPT — ${staseMaster[currentStase].name.toUpperCase()}*
 🏥 Ruangan: ${document.getElementById('ruangBed').value}
