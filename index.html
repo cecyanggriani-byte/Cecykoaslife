@@ -5,168 +5,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedLog Pro - Multi-Stase & EMR Koas FK UMI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        medical: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            600: '#e11d48',
-                            700: '#be123c',
-                            800: '#9f1239',
-                            900: '#881337',
-                            dark: '#4c0519'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <style>
+        .active-tab { background-color: #be123c !important; color: #ffffff !important; }
+        .inactive-tab { background-color: #f1f5f9; color: #475569; }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header Utama (Warna Dinamis Sesuai Stase) -->
-    <header id="mainHeader" class="bg-gradient-to-r from-rose-900 via-rose-800 to-rose-700 text-white shadow-lg border-b-4 border-rose-400 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white p-2.5 rounded-xl shadow-md text-rose-700">
-                        <svg class="w-8 h-8 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L5.603 15.11a2 2 0 00-1.022.547l-1.037 1.037a2 2 0 00-.544 1.022l-.477 2.387a2 2 0 002.387 2.387l2.387-.477a2 2 0 001.022-.547l1.037-1.037a6 6 0 013.86-.517l.318-.158a6 6 0 003.86-.517l2.387.477a2 2 0 002.387-2.387l-.477-2.387a2 2 0 00-.547-1.022l-1.037-1.037z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <h1 class="text-2xl sm:text-3xl font-black tracking-tight">MedLog Pro</h1>
-                            <span class="bg-white/20 backdrop-blur-md text-white text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/30">16 STASE KLINIS</span>
-                        </div>
-                        <p class="text-xs sm:text-sm text-rose-100 mt-1 font-medium">Sistem EMR, CPPT Terperinci, Task Manager & Clinical Scores FK UMI</p>
-                    </div>
-                </div>
-
-                <!-- Selector Stase -->
-                <div class="bg-black/30 p-2 rounded-2xl border border-white/20 flex flex-col gap-1 w-full md:w-80">
-                    <label class="text-[10px] font-bold tracking-wider text-rose-200 uppercase px-1">Pilih Stase Aktif:</label>
-                    <select id="staseSelector" onchange="changeStase()" class="bg-white text-gray-900 font-bold text-xs rounded-xl px-3 py-2 outline-none shadow-inner cursor-pointer">
-                        <option value="penyakit_dalam" selected>🩺 1. Penyakit Dalam (IPD)</option>
-                        <option value="bedah">🔪 2. Bedah</option>
-                        <option value="neurologi">🧠 3. Neurologi / Saraf</option>
-                        <option value="kardiologi">❤️ 4. Kardiologi & Vaskuler</option>
-                        <option value="pulmonologi">🫁 5. Pulmonologi / Paru</option>
-                        <option value="obgyn">🤰 6. Obstetri & Ginekologi</option>
-                        <option value="anak">👶 7. Ilmu Kesehatan Anak</option>
-                        <option value="psikiatri">🧩 8. Psikiatri / Jiwa</option>
-                        <option value="anestesi">💉 9. Anestesi & ICU</option>
-                        <option value="forensik">⚖️ 10. Forensik & Medikolegal</option>
-                        <option value="kulit">🧴 11. Kulit & Kelamin (DV)</option>
-                        <option value="mata">👁️ 12. Mata (Oftalmologi)</option>
-                        <option value="tht">👂 13. THT-KL</option>
-                        <option value="ortopedi">🦴 14. Ortopedi & Traumatologi</option>
-                        <option value="radiologi">🩻 15. Radiologi & Imaging</option>
-                        <option value="onkologi">🎗️ 16. Onkologi</option>
-                    </select>
+    <!-- Header Utama (Tema Warna Dinamis) -->
+    <header id="mainHeader" class="bg-gradient-to-r from-rose-900 via-rose-800 to-rose-700 text-white shadow-lg border-b-4 border-rose-400 p-5">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white p-2.5 rounded-xl text-rose-700 font-black text-xl">🩺</div>
+                <div>
+                    <h1 class="text-2xl font-black">MedLog Pro</h1>
+                    <p class="text-xs text-rose-100">EMR, CPPT Terperinci & Clinical Scores FK UMI</p>
                 </div>
             </div>
 
-            <div class="mt-4 pt-3 border-t border-white/10 text-xs text-rose-100 flex items-center justify-between">
-                <span>Dokter Muda: <strong class="text-white">@CecyAnggriani</strong></span>
-                <span id="staseTag" class="font-bold bg-white/20 px-2.5 py-0.5 rounded-lg">Stase: Penyakit Dalam (IPD)</span>
+            <!-- Selector Stase -->
+            <div class="bg-black/30 p-2 rounded-2xl border border-white/20 w-full md:w-80">
+                <label class="text-[10px] font-bold text-rose-200 uppercase px-1 block">Pilih Stase Aktif:</label>
+                <select id="staseSelector" onchange="changeStase()" class="w-full bg-white text-gray-900 font-bold text-xs rounded-xl px-3 py-2 outline-none cursor-pointer">
+                    <option value="penyakit_dalam" selected>🩺 1. Penyakit Dalam (IPD)</option>
+                    <option value="bedah">🔪 2. Bedah</option>
+                    <option value="neurologi">🧠 3. Neurologi / Saraf</option>
+                    <option value="kardiologi">❤️ 4. Kardiologi & Vaskuler</option>
+                    <option value="pulmonologi">🫁 5. Pulmonologi / Paru</option>
+                    <option value="obgyn">🤰 6. Obstetri & Ginekologi</option>
+                    <option value="anak">👶 7. Ilmu Kesehatan Anak</option>
+                    <option value="psikiatri">🧩 8. Psikiatri / Jiwa</option>
+                    <option value="anestesi">💉 9. Anestesi & ICU</option>
+                    <option value="forensik">⚖️ 10. Forensik & Medikolegal</option>
+                    <option value="kulit">🧴 11. Kulit & Kelamin (DV)</option>
+                    <option value="mata">👁️ 12. Mata (Oftalmologi)</option>
+                    <option value="tht">👂 13. THT-KL</option>
+                    <option value="ortopedi">🦴 14. Ortopedi & Traumatologi</option>
+                    <option value="radiologi">🩻 15. Radiologi & Imaging</option>
+                    <option value="onkologi">🎗️ 16. Onkologi</option>
+                </select>
             </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-3 pt-2 border-t border-white/10 text-xs flex justify-between">
+            <span>Dokter Muda: <strong class="text-white">@CecyAnggriani</strong></span>
+            <span id="staseTag" class="font-bold bg-white/20 px-2.5 py-0.5 rounded-lg">Stase: Penyakit Dalam (IPD)</span>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-grow w-full space-y-6">
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6 w-full flex-grow space-y-6">
 
-        <!-- Navigation Tabs -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-2.5 rounded-2xl shadow-sm border border-gray-200">
-            <button id="tabBtnEMR" onclick="switchTab('emr')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+        <!-- Navigasi Tab Utama -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-2 rounded-2xl shadow-sm border">
+            <button id="btnTabEMR" onclick="showTab('emr')" class="py-2.5 text-xs font-bold rounded-xl transition inactive-tab">
                 📂 Daftar Rekam Medis
             </button>
-            <button id="tabBtnSOAP" onclick="switchTab('soap')" class="py-2.5 text-xs font-bold rounded-xl transition bg-rose-700 text-white shadow">
+            <button id="btnTabSOAP" onclick="showTab('soap')" class="py-2.5 text-xs font-bold rounded-xl transition active-tab">
                 📝 Form CPPT / SOAP Rinci
             </button>
-            <button id="tabBtnScore" onclick="switchTab('score')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+            <button id="btnTabScore" onclick="showTab('score')" class="py-2.5 text-xs font-bold rounded-xl transition inactive-tab">
                 🧮 Calculator Scores
             </button>
-            <button id="tabBtnTask" onclick="switchTab('task')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+            <button id="btnTabTask" onclick="showTab('task')" class="py-2.5 text-xs font-bold rounded-xl transition inactive-tab">
                 📌 Tugas Stase
             </button>
         </div>
 
-        <!-- TAB 1: EMR -->
-        <section id="tabEMR" class="space-y-4 hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+        <!-- TAB 1: EMR PASIEN -->
+        <div id="tabEMR" style="display: none;" class="space-y-4">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border">
                 <h2 class="text-base font-bold text-gray-900 mb-2">📊 Daftar Rekam Medis Pasien</h2>
-                <div class="p-4 bg-gray-50 rounded-xl border text-xs">
-                    <strong>Ny. Hj. Dewi Rana (78 Thn)</strong> - RS Ibnu Sina (Lt 5 An nur)<br>
-                    <span class="text-rose-700 font-bold">Diagnosis:</span> ADHF ec Ischemic Heart Disease + HT
+                <div class="p-4 bg-gray-50 rounded-xl border text-xs space-y-1">
+                    <p class="font-bold text-sm">Ny. Hj. Dewi Rana (78 Thn)</p>
+                    <p class="text-gray-600">RS Pendidikan Ibnu Sina - <strong>Lt 5 An nur</strong></p>
+                    <p class="text-rose-700 font-bold">Diagnosis: ADHF ec Ischemic Heart Disease + Hipertensi</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- TAB 2: SOAP (Default Terbuka) -->
-        <section id="tabSOAP" class="space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
-                <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border">A. IDENTITAS & SOAP PASIEN</h3>
+        <!-- TAB 2: FORM CPPT / SOAP RINCI (DEFAULT TAMPIL) -->
+        <div id="tabSOAP" style="display: block;" class="space-y-6">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border space-y-4">
+                <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border">A. IDENTITAS & DATA PASIEN</h3>
+                
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                    <div><label class="block font-bold mb-1">Nama Pasien</label><input type="text" id="namaPasien" placeholder="Ny. Hj. Dewi Rana" class="w-full bg-gray-50 border rounded-xl p-2.5"></div>
+                    <div>
+                        <label class="block font-bold mb-1">Nama Pasien</label>
+                        <input type="text" id="namaPasien" placeholder="Ny. Hj. Dewi Rana" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
+                    </div>
                     <div>
                         <label class="block font-bold mb-1">Pilih Ruangan / Bangsal</label>
-                        <select id="ruangBed" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
-                            <option>Lt 5 An nur</option>
-                            <option>Lt 4 Al ikhlas</option>
-                            <option>Lt 3 Ar rahman</option>
-                            <option>Lt 2 An Nasr</option>
-                            <option>Lt 5 gL Al Araf</option>
+                        <select id="ruangBed" class="w-full bg-gray-50 border rounded-xl p-2.5 font-bold outline-none cursor-pointer">
+                            <option value="Lt 5 An nur">Lt 5 An nur</option>
+                            <option value="Lt 4 Al ikhlas">Lt 4 Al ikhlas</option>
+                            <option value="Lt 3 Ar rahman">Lt 3 Ar rahman</option>
+                            <option value="Lt 2 An Nasr">Lt 2 An Nasr</option>
+                            <option value="Lt 5 gL Al Araf">Lt 5 gL Al Araf</option>
+                            <option value="Lt gL 4 Al Fath">Lt gL 4 Al Fath</option>
                         </select>
                     </div>
-                    <div><label class="block font-bold mb-1">No. RM / Usia</label><input type="text" id="rmUsia" placeholder="RM: 296912 (78 Thn)" class="w-full bg-gray-50 border rounded-xl p-2.5"></div>
+                    <div>
+                        <label class="block font-bold mb-1">No. RM / Usia</label>
+                        <input type="text" id="rmUsia" placeholder="RM: 296912 (78 Thn)" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div><label class="block font-bold mb-1">S (Subjective)</label><textarea id="valS" rows="2" placeholder="Keluhan utama..." class="w-full bg-gray-50 border rounded-xl p-2.5"></textarea></div>
-                    <div><label class="block font-bold mb-1">O (Objective)</label><textarea id="valO" rows="2" placeholder="Tanda vital..." class="w-full bg-gray-50 border rounded-xl p-2.5"></textarea></div>
-                    <div><label class="block font-bold mb-1">A (Assessment)</label><textarea id="valA" rows="2" placeholder="Diagnosis..." class="w-full bg-gray-50 border rounded-xl p-2.5"></textarea></div>
-                    <div><label class="block font-bold mb-1">P (Plan)</label><textarea id="valP" rows="2" placeholder="Terapi..." class="w-full bg-gray-50 border rounded-xl p-2.5"></textarea></div>
-                </div>
-                <button onclick="generateWAReport()" class="w-full py-3 bg-rose-700 text-white font-bold text-xs rounded-xl shadow">📤 Generate Laporan WhatsApp</button>
-            </div>
-            <div id="outputContainer" class="bg-white rounded-2xl shadow-sm border p-5 hidden">
-                <textarea id="outputWA" rows="8" readonly class="w-full text-xs font-mono bg-gray-50 border rounded-xl p-3"></textarea>
-            </div>
-        </section>
 
-        <!-- TAB 3: CLINICAL SCORES -->
-        <section id="tabScore" class="space-y-4 hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div>
+                        <label class="block font-bold mb-1">S (Subjective) - Keluhan & Riwayat</label>
+                        <textarea id="valS" rows="3" placeholder="Keluhan utama saat ini..." class="w-full bg-gray-50 border rounded-xl p-2.5 outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">O (Objective) - TTV & Pemfis</label>
+                        <textarea id="valO" rows="3" placeholder="TD: 120/80, Nadi: 80x/m, S: 36.5C..." class="w-full bg-gray-50 border rounded-xl p-2.5 outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">A (Assessment) - Diagnosis</label>
+                        <textarea id="valA" rows="3" placeholder="Diagnosis kerja ICD-10..." class="w-full bg-gray-50 border rounded-xl p-2.5 outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">P (Planning) - Terapi & Instruksi</label>
+                        <textarea id="valP" rows="3" placeholder="Rencana terapi & obat..." class="w-full bg-gray-50 border rounded-xl p-2.5 outline-none"></textarea>
+                    </div>
+                </div>
+
+                <button onclick="generateWAReport()" class="w-full py-3 bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs rounded-xl shadow transition">
+                    📤 Generate Laporan Format WhatsApp
+                </button>
+            </div>
+
+            <div id="outputContainer" class="bg-white rounded-2xl p-5 shadow-sm border hidden">
+                <textarea id="outputWA" rows="8" readonly class="w-full text-xs font-mono bg-gray-50 border rounded-xl p-3 text-gray-800"></textarea>
+            </div>
+        </div>
+
+        <!-- TAB 3: CLINICAL CALCULATOR & SCORES -->
+        <div id="tabScore" style="display: none;" class="space-y-4">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b">
-                    <h2 class="text-base font-bold text-gray-900">🧮 Calculator & Clinical Scores (<span id="scoreStaseTitle">Penyakit Dalam (IPD)</span>)</h2>
-                    <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border">16 Stase Aktif</span>
+                    <h2 class="text-base font-bold text-gray-900">🧮 Calculator Scores (<span id="scoreStaseTitle">Penyakit Dalam (IPD)</span>)</h2>
+                    <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border">16 Stase Integrasi</span>
                 </div>
                 <div id="scoreCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
-        </section>
+        </div>
 
-        <!-- TAB 4: TASKS -->
-        <section id="tabTask" class="space-y-4 hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+        <!-- TAB 4: MANAJEMEN TUGAS KOAS -->
+        <div id="tabTask" style="display: none;" class="space-y-4">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border">
                 <h2 class="text-base font-bold text-gray-900 mb-3">📌 Daftar Tugas Stase</h2>
                 <div class="flex gap-2 mb-4">
-                    <input type="text" id="newTaskInput" placeholder="Tambah tugas baru..." class="flex-1 text-xs bg-gray-50 border rounded-xl px-3 py-2.5">
-                    <button onclick="addTask()" class="bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl">Tambah</button>
+                    <input type="text" id="newTaskInput" placeholder="Tambah tugas baru..." class="flex-1 text-xs bg-gray-50 border rounded-xl px-3 py-2.5 outline-none">
+                    <button onclick="addTask()" class="bg-rose-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow">Tambah</button>
                 </div>
                 <ul id="taskList" class="space-y-2"></ul>
             </div>
-        </section>
+        </div>
 
     </main>
 
-    <!-- MODAL KALKULATOR SKOR MEDIS -->
+    <!-- MODAL KALKULATOR SKOR MEDIS SPESIFIK -->
     <div id="calcModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="bg-rose-700 text-white p-4 flex justify-between items-center" id="modalHeader">
+            <div class="bg-rose-700 text-white p-4 flex justify-between items-center">
                 <h3 id="modalScoreTitle" class="text-sm font-bold">Kalkulator Skor Medis</h3>
                 <button onclick="closeModal()" class="text-white hover:bg-white/20 rounded-lg text-xs font-bold px-2 py-1">✕ Tutup</button>
             </div>
@@ -204,15 +205,40 @@
         let currentStase = 'penyakit_dalam';
         let currentTasks = [...staseMaster.penyakit_dalam.tasks];
 
+        function showTab(tabName) {
+            document.getElementById('tabEMR').style.display = 'none';
+            document.getElementById('tabSOAP').style.display = 'none';
+            document.getElementById('tabScore').style.display = 'none';
+            document.getElementById('tabTask').style.display = 'none';
+
+            document.getElementById('btnTabEMR').className = "py-2.5 text-xs font-bold rounded-xl transition inactive-tab";
+            document.getElementById('btnTabSOAP').className = "py-2.5 text-xs font-bold rounded-xl transition inactive-tab";
+            document.getElementById('btnTabScore').className = "py-2.5 text-xs font-bold rounded-xl transition inactive-tab";
+            document.getElementById('btnTabTask').className = "py-2.5 text-xs font-bold rounded-xl transition inactive-tab";
+
+            if (tabName === 'emr') {
+                document.getElementById('tabEMR').style.display = 'block';
+                document.getElementById('btnTabEMR').className = "py-2.5 text-xs font-bold rounded-xl transition active-tab";
+            } else if (tabName === 'soap') {
+                document.getElementById('tabSOAP').style.display = 'block';
+                document.getElementById('btnTabSOAP').className = "py-2.5 text-xs font-bold rounded-xl transition active-tab";
+            } else if (tabName === 'score') {
+                document.getElementById('tabScore').style.display = 'block';
+                document.getElementById('btnTabScore').className = "py-2.5 text-xs font-bold rounded-xl transition active-tab";
+            } else if (tabName === 'task') {
+                document.getElementById('tabTask').style.display = 'block';
+                document.getElementById('btnTabTask').className = "py-2.5 text-xs font-bold rounded-xl transition active-tab";
+            }
+        }
+
         function changeStase() {
             currentStase = document.getElementById('staseSelector').value;
             const data = staseMaster[currentStase];
-            
-            const header = document.getElementById('mainHeader');
-            header.className = `bg-gradient-to-r ${data.color} text-white shadow-lg border-b-4 border-white/30 transition-all duration-300`;
 
+            document.getElementById('mainHeader').className = `bg-gradient-to-r ${data.color} text-white shadow-lg border-b-4 border-white/30 p-5`;
             document.getElementById('staseTag').innerText = `Stase: ${data.name}`;
             document.getElementById('scoreStaseTitle').innerText = data.name;
+
             currentTasks = [...data.tasks];
             renderTasks();
             renderScores();
@@ -225,6 +251,7 @@
                 list.innerHTML += `<li class="flex justify-between p-3 bg-gray-50 rounded-xl border text-xs"><span>${t}</span><button onclick="currentTasks.splice(${i},1);renderTasks()" class="text-rose-600 font-bold">Hapus</button></li>`;
             });
         }
+
         function addTask() {
             const inp = document.getElementById('newTaskInput');
             if(inp.value.trim()){ currentTasks.push(inp.value.trim()); inp.value=''; renderTasks(); }
@@ -236,7 +263,7 @@
             staseMaster[currentStase].scores.forEach(s => {
                 container.innerHTML += `
                     <div class="p-4 bg-gray-50 rounded-xl border flex flex-col justify-between space-y-3 shadow-sm hover:shadow transition">
-                        <div><h4 class="text-xs font-bold text-gray-900">${s}</h4><p class="text-[11px] text-gray-500 mt-1">Kalkulator klinis standar.</p></div>
+                        <div><h4 class="text-xs font-bold text-gray-900">${s}</h4><p class="text-[11px] text-gray-500 mt-1">Kalkulator & evaluasi parameter klinis.</p></div>
                         <button onclick="openScoreModal('${s}')" class="w-full py-2 bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold rounded-lg shadow">Hitung / Evaluasi ${s}</button>
                     </div>`;
             });
@@ -251,9 +278,9 @@
                 body.innerHTML = `
                     <div><label class="font-semibold">Appearance (Warna Kulit):</label><select id="apA" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Seluruh tubuh kemerahan</option><option value="1">1 - Tubuh merah, ekstremitas biru</option><option value="0">0 - Seluruh tubuh pucat/biru</option></select></div>
                     <div><label class="font-semibold">Pulse (Denyut Jantung):</label><select id="apP" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - > 100 x/menit</option><option value="1">1 - < 100 x/menit</option><option value="0">0 - Tidak ada</option></select></div>
-                    <div><label class="font-semibold">Grimace (Refleks):</label><select id="apG" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Menangis kuat / Batuk</option><option value="1">1 - Meringis / gerak sedikit</option><option value="0">0 - Tidak ada respon</option></select></div>
-                    <div><label class="font-semibold">Activity (Tonus Otot):</label><select id="apAct" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Gerakan aktif</option><option value="1">1 - Ekstremitas fleksi sedikit</option><option value="0">0 - Lumpuh / lemah</option></select></div>
-                    <div><label class="font-semibold">Respiration (Pernapasan):</label><select id="apR" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Menangis kuat, teratur</option><option value="1">1 - Menangis lemah, lambat</option><option value="0">0 - Tidak ada napas</option></select></div>`;
+                    <div><label class="font-semibold">Grimace (Refleks):</label><select id="apG" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Batuk / menangis kuat</option><option value="1">1 - Meringis / gerak sedikit</option><option value="0">0 - Tidak ada respon</option></select></div>
+                    <div><label class="font-semibold">Activity (Tonus Otot):</label><select id="apAct" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Gerakan aktif</option><option value="1">1 - Fleksi sedikit</option><option value="0">0 - Lumpuh / lemah</option></select></div>
+                    <div><label class="font-semibold">Respiration (Pernapasan):</label><select id="apR" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded p-2"><option value="2">2 - Menangis kuat, teratur</option><option value="1">1 - Menangis lemah</option><option value="0">0 - Tidak ada napas</option></select></div>`;
                 calcAPGAR();
             } else if (scoreName.includes('GCS')) {
                 body.innerHTML = `
@@ -283,15 +310,6 @@
         }
 
         function closeModal() { document.getElementById('calcModal').classList.add('hidden'); }
-        
-        function switchTab(t) {
-            ['EMR','SOAP','Score','Task'].forEach(id => {
-                document.getElementById('tab'+id).classList.add('hidden');
-                document.getElementById('tabBtn'+id).className = "py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100";
-            });
-            document.getElementById('tab'+t).classList.remove('hidden');
-            document.getElementById('tabBtn'+t).className = "py-2.5 text-xs font-bold rounded-xl transition bg-rose-700 text-white shadow";
-        }
 
         function generateWAReport() {
             let r = `*LAPORAN CPPT — ${staseMaster[currentStase].name.toUpperCase()}*
