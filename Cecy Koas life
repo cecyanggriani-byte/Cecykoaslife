@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedLog Pro - Multi-Stase & EMR Koas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            dark: '#052e16'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header / Banner Utama -->
+    <header id="mainHeader" class="bg-gradient-to-r from-rose-900 via-rose-800 to-rose-700 text-white shadow-lg border-b-4 border-rose-500 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 py-5 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white p-2.5 rounded-xl shadow-md text-rose-700">
+                        <svg class="w-8 h-8 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="text-2xl sm:text-3xl font-black tracking-tight">MedLog Pro</h1>
+                            <span class="bg-white/20 backdrop-blur-md text-white text-xs font-bold px-2.5 py-0.5 rounded-full border border-white/30">SUITE KOAS</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-rose-100 mt-1 font-medium">Sistem EMR, CPPT & Task Manager Terintegrasi FK UMI</p>
+                    </div>
+                </div>
+
+                <!-- Pemilih Stase -->
+                <div class="bg-black/20 p-2 rounded-2xl border border-white/20 flex flex-col gap-1 w-full md:w-auto">
+                    <label class="text-[10px] font-bold tracking-wider text-rose-200 uppercase px-1">Pilih Stase Aktif:</label>
+                    <select id="staseSelector" onchange="changeStase()" class="bg-white text-gray-900 font-bold text-xs rounded-xl px-3 py-2 outline-none shadow-inner cursor-pointer">
+                        <option value="kardiologi">❤️ Kardiologi & Vaskuler</option>
+                        <option value="neurologi">🧠 Neurologi / Saraf</option>
+                        <option value="psikiatri">🧩 Psikiatri / Kesehatan Jiwa</option>
+                        <option value="anak">👶 Pediatri / Kesehatan Anak</option>
+                        <option value="radiologi">🩻 Radiologi & Imaging</option>
+                        <option value="obgyn">🤰 Obstetri & Ginekologi</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-white/10 text-xs text-rose-100 flex items-center justify-between">
+                <span>Dokter Muda: <strong class="text-white">@CecyAnggriani</strong></span>
+                <span id="staseTag" class="font-bold bg-white/20 px-2.5 py-0.5 rounded-lg">Stase: Kardiologi</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Konten Utama -->
+    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-grow w-full space-y-6">
+
+        <!-- Navigasi Tab -->
+        <div class="flex border-b border-gray-200 space-x-2 sm:space-x-4 bg-white p-2 rounded-2xl shadow-sm border">
+            <button id="tabBtnTask" onclick="switchTab('task')" class="flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition bg-rose-700 text-white shadow">
+                📌 Manajemen Tugas Koas
+            </button>
+            <button id="tabBtnSOAP" onclick="switchTab('soap')" class="flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+                📝 Form CPPT / SOAP
+            </button>
+            <button id="tabBtnCalc" onclick="switchTab('calc')" class="flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+                🧮 Kalkulator & Skor Medis
+            </button>
+        </div>
+
+        <!-- TAB 1: MANAJEMEN TUGAS KOAS -->
+        <section id="tabTask" class="space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                <div class="flex justify-between items-center mb-4 pb-2 border-b">
+                    <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                        📋 Daftar Tugas Stase (<span id="taskStaseTitle">Kardiologi</span>)
+                    </h2>
+                    <span class="text-xs font-semibold text-gray-500" id="taskCount">0 Selesai</span>
+                </div>
+
+                <!-- Input Tugas Baru -->
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="newTaskInput" placeholder="Tambah tugas baru (misal: Bikin slide Laporan Kasus, Journal Reading...)" class="flex-1 text-xs bg-gray-50 border border-gray-300 rounded-xl px-3 py-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600">
+                    <button onclick="addTask()" class="bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow">
+                        Tambah
+                    </button>
+                </div>
+
+                <!-- List Tugas -->
+                <ul id="taskList" class="space-y-2">
+                    <!-- Default Tasks akan di-generate via JS -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- TAB 2: FORM CPPT / SOAP -->
+        <section id="tabSOAP" class="space-y-6 hidden">
+            <!-- Data Jaga -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                <h2 class="text-sm font-bold text-gray-900 mb-3 pb-2 border-b flex items-center gap-2">
+                    🏥 Data Jaga & Identitas Dokter Muda
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                    <div>
+                        <label class="block font-semibold text-gray-600 mb-1">Rumah Sakit</label>
+                        <select id="rsInput" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2 font-medium">
+                            <option>RS Pendidikan Ibnu Sina Y.W. UMI</option>
+                            <option>RSKD Dadi</option>
+                            <option>RSUD Sayang Rakyat</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-600 mb-1">Shift Jaga</label>
+                        <select id="shiftInput" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2 font-medium">
+                            <option>JAGA PAGI</option>
+                            <option>JAGA SIANG</option>
+                            <option>JAGA MALAM</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-600 mb-1">Nama Pasien</label>
+                        <input type="text" id="namaPasien" placeholder="Tn. X / An. Y" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2 font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-600 mb-1">No. RM / Ruangan</label>
+                        <input type="text" id="rmRuangan" placeholder="RM: 12345 / Melati Bed 3" class="w-full bg-gray-50 border border-gray-300 rounded-xl p-2 font-medium">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form SOAP Dinamis -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
+                <h2 class="text-sm font-bold text-gray-900 pb-2 border-b flex items-center gap-2">
+                    📝 Form SOAP Pasien
+                </h2>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">S - Subjective (Anamnesis / Keluhan Utama)</label>
+                    <textarea id="valS" rows="2" placeholder="Tuliskan keluhan utama, RPS, RPD..." class="w-full text-xs bg-gray-50 border border-gray-300 rounded-xl p-3 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">O - Objective (Tanda Vital & Pemfis Khusus Stase)</label>
+                    <textarea id="valO" rows="2" placeholder="TD, Nadi, Pernapasan, Suhu, SpO2, Status Lokalis..." class="w-full text-xs bg-gray-50 border border-gray-300 rounded-xl p-3 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">A - Assessment (Diagnosis Kerja & DD)</label>
+                        <textarea id="valA" rows="2" placeholder="Diagnosis Utama + Differential Diagnosis..." class="w-full text-xs bg-gray-50 border border-gray-300 rounded-xl p-3 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">P - Plan (Terapi, Workup, Monitoring)</label>
+                        <textarea id="valP" rows="2" placeholder="Rencana Terapi, Laboratorium, Radiologi..." class="w-full text-xs bg-gray-50 border border-gray-300 rounded-xl p-3 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                    </div>
+                </div>
+
+                <button onclick="generateWAReport()" class="w-full py-3 bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs rounded-xl shadow transition">
+                    📤 Generate Format Laporan WhatsApp
+                </button>
+            </div>
+
+            <!-- Output Preview -->
+            <div id="outputContainer" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hidden">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-xs font-bold text-gray-800">📋 Hasil Laporan WhatsApp Siap Copy:</h3>
+                    <button onclick="copyWA()" class="bg-rose-100 text-rose-800 font-bold text-[11px] px-3 py-1 rounded-lg hover:bg-rose-200">Salin Teks</button>
+                </div>
+                <textarea id="outputWA" rows="8" readonly class="w-full text-xs font-mono bg-gray-50 border border-gray-300 rounded-xl p-3 text-gray-800"></textarea>
+            </div>
+        </section>
+
+        <!-- TAB 3: KALKULATOR & SKOR MEDIS -->
+        <section id="tabCalc" class="space-y-4 hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Kalkulator GCS -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                    <h3 class="text-sm font-bold text-gray-900 mb-3 pb-2 border-b flex items-center gap-2">
+                        🧠 Kalkulator GCS (Glasgow Coma Scale)
+                    </h3>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-semibold text-gray-600 mb-1">Eye (Respon Membuka Mata):</label>
+                            <select id="gcsE" onchange="calcGCS()" class="w-full bg-gray-50 border rounded-xl p-2 font-medium">
+                                <option value="4">4 - Spontan</option>
+                                <option value="3">3 - Terhadap Suara / Panggilan</option>
+                                <option value="2">2 - Terhadap Nyeri</option>
+                                <option value="1">1 - Tidak Ada Respon</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600 mb-1">Verbal (Respon Suara):</label>
+                            <select id="gcsV" onchange="calcGCS()" class="w-full bg-gray-50 border rounded-xl p-2 font-medium">
+                                <option value="5">5 - Orientasi Baik</option>
+                                <option value="4">4 - Bingung / Disorientasi</option>
+                                <option value="3">3 - Kata-kata Tidak Jelas</option>
+                                <option value="2">2 - Suara Tanpa Arti (Mengerang)</option>
+                                <option value="1">1 - Tidak Ada Respon</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600 mb-1">Motorik (Respon Gerak):</label>
+                            <select id="gcsM" onchange="calcGCS()" class="w-full bg-gray-50 border rounded-xl p-2 font-medium">
+                                <option value="6">6 - Mengikuti Perintah</option>
+                                <option value="5">5 - Melokalisir Nyeri</option>
+                                <option value="4">4 - Menghindari Nyeri (Fleksi Normal)</option>
+                                <option value="3">3 - Fleksi Anormal (Dekortikasi)</option>
+                                <option value="2">2 - Ekstensi Anormal (Deserebrasi)</option>
+                                <option value="1">1 - Tidak Ada Respon</option>
+                            </select>
+                        </div>
+                        <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl text-center">
+                            <span class="text-xs font-bold text-rose-900">Total GCS: </span>
+                            <span id="gcsResult" class="text-lg font-black text-rose-700">E4V5M6 (15) - Compos Mentis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kalkulator APGAR Score -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+                    <h3 class="text-sm font-bold text-gray-900 mb-3 pb-2 border-b flex items-center gap-2">
+                        👶 APGAR Score (Bayi Baru Lahir)
+                    </h3>
+                    <div class="space-y-2 text-xs">
+                        <div>
+                            <label class="block font-semibold text-gray-600">Appearance (Warna Kulit):</label>
+                            <select id="apgA" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded-xl p-1.5 font-medium">
+                                <option value="2">2 - Seluruh Tubuh Kemerahan</option>
+                                <option value="1">1 - Tubuh Merah, Ekstremitas Biru</option>
+                                <option value="0">0 - Seluruh Tubuh Pucat/Biru</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Pulse (Denyut Jantung):</label>
+                            <select id="apgP" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded-xl p-1.5 font-medium">
+                                <option value="2">2 - > 100 x/menit</option>
+                                <option value="1">1 - < 100 x/menit</option>
+                                <option value="0">0 - Tidak Ada</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Grimace (Refleks):</label>
+                            <select id="apgG" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded-xl p-1.5 font-medium">
+                                <option value="2">2 - Batuk / Bersin / Menangis Kuat</option>
+                                <option value="1">1 - Meringis / Gerakan Sedikit</option>
+                                <option value="0">0 - Tidak Ada Respon</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Activity (Tonus Otot):</label>
+                            <select id="apgAct" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded-xl p-1.5 font-medium">
+                                <option value="2">2 - Gerakan Aktif</option>
+                                <option value="1">1 - Ekstremitas Fleksi Sedikit</option>
+                                <option value="0">0 - Lumpuh / Lemah</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-gray-600">Respiration (Pernapasan):</label>
+                            <select id="apgR" onchange="calcAPGAR()" class="w-full bg-gray-50 border rounded-xl p-1.5 font-medium">
+                                <option value="2">2 - Menangis Kuat, Napas Teratur</option>
+                                <option value="1">1 - Menangis Lemah, Napas Lambat</option>
+                                <option value="0">0 - Tidak Ada Napas</option>
+                            </select>
+                        </div>
+                        <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center mt-2">
+                            <span class="text-xs font-bold text-emerald-900">Skor APGAR: </span>
+                            <span id="apgarResult" class="text-base font-black text-emerald-700">10 - Normal / Vigorous Baby</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-4 text-center text-xs text-gray-500 mt-auto">
+        &copy; 2026 MedLog Pro &bull; Universitas Muslim Indonesia.
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const staseData = {
+            kardiologi: {
+                name: "Kardiologi & Vaskuler",
+                theme: "from-rose-900 via-rose-800 to-rose-700",
+                btnColor: "bg-rose-700",
+                borderColor: "border-rose-500",
+                tasks: ["Diskusi Laporan Kasus (ADHF / STEMI)", "Interpretasi EKG 12 Lead", "Journal Reading Kardiologi", "Bimbingan DPJP Kardiologi"]
+            },
+            neurologi: {
+                name: "Neurologi / Saraf",
+                theme: "from-purple-900 via-purple-800 to-purple-700",
+                btnColor: "bg-purple-700",
+                borderColor: "border-purple-500",
+                tasks: ["Pemeriksaan Saraf Kranialis (N I - N XII)", "Hitung Skor GCS & NIHSS Pasien Stroke", "Refleks Fisiologis & Patologis", "Laporan Kasus Stroke / Epilepsy"]
+            },
+            psikiatri: {
+                name: "Psikiatri / Kesehatan Jiwa",
+                theme: "from-teal-900 via-teal-800 to-teal-700",
+                btnColor: "bg-teal-700",
+                borderColor: "border-teal-500",
+                tasks: ["Pemeriksaan Status Mental", "Klasifikasi Diagnosis PPDGJ-III / DSM-5", "Autoanamnesis & Alloanamnesis Pasien", "Diskusi Kasus Skizofrenia / Gangguan Afektif"]
+            },
+            anak: {
+                name: "Pediatri / Kesehatan Anak",
+                theme: "from-blue-900 via-blue-800 to-blue-700",
+                btnColor: "bg-blue-700",
+                borderColor: "border-blue-500",
+                tasks: ["Pemeriksaan Refleks Neonatus & APGAR Score", "Penilaian Tumbuh Tumbuh (KPSP & Z-Score)", "Hitung Dosis Obat Anak & Terapi Cairan", "Follow-Up Pasien NICU / Perinatologi"]
+            },
+            radiologi: {
+                name: "Radiologi & Imaging",
+                theme: "from-slate-900 via-slate-800 to-slate-700",
+                btnColor: "bg-slate-700",
+                borderColor: "border-slate-500",
+                tasks: ["Expertise Foto Thorax PA / AP", "Pembacaan CT Scan Kepala & Abdomen", "Prosedur Barium Enema & Barium Swallow", "Presentasi Ekspertise Radiologi"]
+            },
+            obgyn: {
+                name: "Obstetri & Ginekologi",
+                theme: "from-pink-900 via-pink-800 to-pink-700",
+                btnColor: "bg-pink-700",
+                borderColor: "border-pink-500",
+                tasks: ["Pemeriksaan Leopold I - IV & DJJ", "Partograf & Pimpinan Persalinan", "Pemeriksaan Inspekulo & VT", "Laporan Kasus PEB / HPP"]
+            }
+        };
+
+        let currentStase = 'kardiologi';
+        let currentTasks = [...staseData.kardiologi.tasks];
+
+        function changeStase() {
+            currentStase = document.getElementById('staseSelector').value;
+            const data = staseData[currentStase];
+
+            // Update UI Theme
+            const header = document.getElementById('mainHeader');
+            header.className = `bg-gradient-to-r ${data.theme} text-white shadow-lg border-b-4 ${data.borderColor} transition-all duration-300`;
+            document.getElementById('staseTag').innerText = `Stase: ${data.name}`;
+            document.getElementById('taskStaseTitle').innerText = data.name;
+
+            // Load Stase Tasks
+            currentTasks = [...data.tasks];
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+            currentTasks.forEach((task, index) => {
+                list.innerHTML += `
+                    <li class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
+                        <label class="flex items-center space-x-3 text-xs font-medium cursor-pointer">
+                            <input type="checkbox" onchange="toggleTask(${index})" class="w-4 h-4 text-rose-600 rounded">
+                            <span>${task}</span>
+                        </label>
+                        <button onclick="removeTask(${index})" class="text-xs text-red-500 hover:text-red-700 font-bold">Hapus</button>
+                    </li>
+                `;
+            });
+            document.getElementById('taskCount').innerText = `${currentTasks.length} Tugas Terdaftar`;
+        }
+
+        function addTask() {
+            const input = document.getElementById('newTaskInput');
+            if (input.value.trim() !== '') {
+                currentTasks.push(input.value.trim());
+                input.value = '';
+                renderTasks();
+            }
+        }
+
+        function removeTask(index) {
+            currentTasks.splice(index, 1);
+            renderTasks();
+        }
+
+        function switchTab(tabName) {
+            document.getElementById('tabTask').classList.add('hidden');
+            document.getElementById('tabSOAP').classList.add('hidden');
+            document.getElementById('tabCalc').classList.add('hidden');
+
+            document.getElementById('tabBtnTask').className = "flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition text-gray-600 hover:bg-gray-100";
+            document.getElementById('tabBtnSOAP').className = "flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition text-gray-600 hover:bg-gray-100";
+            document.getElementById('tabBtnCalc').className = "flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition text-gray-600 hover:bg-gray-100";
+
+            if (tabName === 'task') {
+                document.getElementById('tabTask').classList.remove('hidden');
+                document.getElementById('tabBtnTask').className = "flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition bg-rose-700 text-white shadow";
+            } else if (tabName === 'soap') {
+                document.getElementById('tabSOAP').classList.remove('hidden');
+                document.getElementById('tabBtnSOAP').className = "flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition bg-rose-700 text-white shadow";
+            } else if (tabName === 'calc') {
+                document.getElementById('tabCalc').classList.remove('hidden');
+                document.getElementById('tabBtnCalc').className = "flex-1 py-2.5 text-xs sm:text-sm font-bold rounded-xl transition bg-rose-700 text-white shadow";
+            }
+        }
+
+        function generateWAReport() {
+            const rs = document.getElementById('rsInput').value;
+            const shift = document.getElementById('shiftInput').value;
+            const pasien = document.getElementById('namaPasien').value || '(Nama Pasien)';
+            const rm = document.getElementById('rmRuangan').value || '-';
+            const s = document.getElementById('valS').value || '-';
+            const o = document.getElementById('valO').value || '-';
+            const a = document.getElementById('valA').value || '-';
+            const p = document.getElementById('valP').value || '-';
+
+            const report = `*LAPORAN CPPT STASE ${staseData[currentStase].name.toUpperCase()}*
+🏥 *${rs}* (${shift})
+👤 *Pasien:* ${pasien} | *Ruangan/RM:* ${rm}
+
+*S:* ${s}
+*O:* ${o}
+*A:* ${a}
+*P:* ${p}
+
+_Terkirim via MedLog Pro @CecyAnggriani_`;
+
+            document.getElementById('outputContainer').classList.remove('hidden');
+            document.getElementById('outputWA').value = report;
+        }
+
+        function copyWA() {
+            const text = document.getElementById('outputWA');
+            text.select();
+            document.execCommand('copy');
+            alert('Laporan berhasil disalin ke clipboard!');
+        }
+
+        function calcGCS() {
+            const e = parseInt(document.getElementById('gcsE').value);
+            const v = parseInt(document.getElementById('gcsV').value);
+            const m = parseInt(document.getElementById('gcsM').value);
+            const total = e + v + m;
+            let ket = "Compos Mentis";
+            if (total <= 8) ket = "Koma / Sakit Berat";
+            else if (total <= 12) ket = "Somnolen / Sopor";
+
+            document.getElementById('gcsResult').innerText = `E${e}V${v}M${m} (${total}) - ${ket}`;
+        }
+
+        function calcAPGAR() {
+            const a = parseInt(document.getElementById('apgA').value);
+            const p = parseInt(document.getElementById('apgP').value);
+            const g = parseInt(document.getElementById('apgG').value);
+            const act = parseInt(document.getElementById('apgAct').value);
+            const r = parseInt(document.getElementById('apgR').value);
+            const total = a + p + g + act + r;
+            let ket = "Normal / Vigorous Baby";
+            if (total <= 3) ket = "Asfiksia Berat";
+            else if (total <= 6) ket = "Asfiksia Sedang";
+
+            document.getElementById('apgarResult').innerText = `${total} - ${ket}`;
+        }
+
+        // Initialize
+        renderTasks();
+    </script>
+</body>
+</html>
