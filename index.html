@@ -51,10 +51,10 @@
                 <div class="bg-black/30 p-2 rounded-2xl border border-white/20 flex flex-col gap-1 w-full md:w-80">
                     <label class="text-[10px] font-bold tracking-wider text-rose-200 uppercase px-1">Pilih Stase Aktif:</label>
                     <select id="staseSelector" onchange="changeStase()" class="bg-white text-gray-900 font-bold text-xs rounded-xl px-3 py-2 outline-none shadow-inner cursor-pointer">
-                        <option value="penyakit_dalam">🩺 1. Penyakit Dalam (IPD)</option>
+                        <option value="penyakit_dalam" selected>🩺 1. Penyakit Dalam (IPD)</option>
                         <option value="bedah">🔪 2. Bedah</option>
                         <option value="neurologi">🧠 3. Neurologi / Saraf</option>
-                        <option value="kardiologi" selected>❤️ 4. Kardiologi & Vaskuler</option>
+                        <option value="kardiologi">❤️ 4. Kardiologi & Vaskuler</option>
                         <option value="pulmonologi">🫁 5. Pulmonologi / Paru</option>
                         <option value="obgyn">🤰 6. Obstetri & Ginekologi</option>
                         <option value="anak">👶 7. Ilmu Kesehatan Anak</option>
@@ -73,7 +73,7 @@
 
             <div class="mt-4 pt-3 border-t border-white/10 text-xs text-rose-100 flex items-center justify-between">
                 <span>Dokter Muda: <strong class="text-white">@CecyAnggriani</strong></span>
-                <span id="staseTag" class="font-bold bg-white/20 px-2.5 py-0.5 rounded-lg">Stase: Kardiologi</span>
+                <span id="staseTag" class="font-bold bg-white/20 px-2.5 py-0.5 rounded-lg">Stase: Penyakit Dalam (IPD)</span>
             </div>
         </div>
     </header>
@@ -83,13 +83,13 @@
 
         <!-- Navigation Tabs -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-2 rounded-2xl shadow-sm border border-gray-200">
-            <button id="tabBtnEMR" onclick="switchTab('emr')" class="py-2.5 text-xs font-bold rounded-xl transition bg-medical-700 text-white shadow">
+            <button id="tabBtnEMR" onclick="switchTab('emr')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
                 📂 Daftar Rekam Medis Pasien
             </button>
             <button id="tabBtnSOAP" onclick="switchTab('soap')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
                 📝 Form CPPT / SOAP Rinci
             </button>
-            <button id="tabBtnScore" onclick="switchTab('score')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
+            <button id="tabBtnScore" onclick="switchTab('score')" class="py-2.5 text-xs font-bold rounded-xl transition bg-medical-700 text-white shadow">
                 🧮 Calculator & Clinical Scores
             </button>
             <button id="tabBtnTask" onclick="switchTab('task')" class="py-2.5 text-xs font-bold rounded-xl transition text-gray-600 hover:bg-gray-100">
@@ -98,12 +98,12 @@
         </div>
 
         <!-- TAB 1: DAFTAR REKAM MEDIS PASIEN TERDATA -->
-        <section id="tabEMR" class="space-y-4">
+        <section id="tabEMR" class="space-y-4 hidden">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-3 border-b">
                     <div>
                         <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                            📊 Daftar Rekam Medis Pasien Terdata (<span id="emrCountText">4 Pasien</span>)
+                            📊 Daftar Rekam Medis Pasien Terdata (<span id="emrCountText">2 Pasien</span>)
                         </h2>
                         <p class="text-xs text-gray-500">Rekapitulasi bangsal, konsul, dan riwayat visit dokter muda.</p>
                     </div>
@@ -117,15 +117,6 @@
                     </div>
                 </div>
 
-                <!-- Filter Bar -->
-                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-4 bg-rose-50/50 p-3 rounded-xl border border-rose-100 text-xs">
-                    <select class="bg-white border rounded-lg p-2 font-medium"><option>Semua Rumah Sakit</option><option>RS Ibnu Sina Y.W. UMI</option><option>RSKD Dadi</option><option>RSUD Sayang Rakyat</option></select>
-                    <select class="bg-white border rounded-lg p-2 font-medium"><option>Semua Status Rawat</option><option>Pasien Baru</option><option>Pasien Lama / Follow-Up</option></select>
-                    <select class="bg-white border rounded-lg p-2 font-medium"><option>Semua Kamar / Ruang</option><option>ICU / ICCU</option><option>Bangsal Jantung</option><option>Poli / IGD</option></select>
-                    <select class="bg-white border rounded-lg p-2 font-medium"><option>Semua DPJP Utama</option></select>
-                </div>
-
-                <!-- Table Pasien -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-700 border-collapse">
                         <thead class="bg-gray-100 text-gray-800 uppercase font-bold text-[11px] border-b">
@@ -149,19 +140,6 @@
                                 <td class="p-3"><strong>Cecy Anggriani</strong><br><span class="text-[10px] text-emerald-600 font-bold">1 CPPT (11/10/2026)</span></td>
                                 <td class="p-3 text-center space-y-1">
                                     <button onclick="switchTab('soap')" class="bg-rose-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-md block w-full">Buka CPPT</button>
-                                    <button onclick="alert('Pasien dipulangkan.')" class="bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-md block w-full">Pulangkan</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-rose-50/30 transition">
-                                <td class="p-3">RS Pendidikan Ibnu Sina Y.W. UMI</td>
-                                <td class="p-3">Lt 4 (Al-Ikhlas) 402 Bed 2</td>
-                                <td class="p-3"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">Lama</span><br><span class="text-[10px] text-gray-500">Rawat Hr-6</span></td>
-                                <td class="p-3"><strong>Ny. Rawasia</strong> (75 Thn)<br><span class="text-gray-500">RM: 296682</span></td>
-                                <td class="p-3"><strong>Dr. Dr. Lutfi Parewangi, Sp.PD</strong><br><span class="text-[10px] text-gray-500">Konsul: dr. Nurhikmawati, Sp.JP</span></td>
-                                <td class="p-3"><strong>Cecy Anggriani</strong><br><span class="text-[10px] text-emerald-600 font-bold">1 CPPT (11/10/2026)</span></td>
-                                <td class="p-3 text-center space-y-1">
-                                    <button onclick="switchTab('soap')" class="bg-rose-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-md block w-full">Buka CPPT</button>
-                                    <button onclick="alert('Pasien dipulangkan.')" class="bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-md block w-full">Pulangkan</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -172,18 +150,15 @@
 
         <!-- TAB 2: FORM CPPT / SOAP RINCI & PENUNJANG -->
         <section id="tabSOAP" class="space-y-6 hidden">
-            
-            <!-- Section A: Identitas & Data Jaga -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
                 <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border border-rose-100 flex items-center justify-between">
                     <span>A. DATA JAGA & IDENTITAS PASIEN</span>
-                    <span class="text-[10px] text-rose-600">FK UMI Clinical EMR</span>
                 </h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
                     <div>
                         <label class="block font-semibold text-gray-600 mb-1">Rumah Sakit</label>
-                        <select id="rsInput" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600">
+                        <select id="rsInput" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
                             <option>RS Pendidikan Ibnu Sina Y.W. UMI</option>
                             <option>RSKD Dadi</option>
                             <option>RSUD Sayang Rakyat</option>
@@ -202,181 +177,58 @@
                         <input type="text" id="rmUsia" placeholder="78 Thn / RM: 296912" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">DPJP Utama & Konsul</label>
-                        <input type="text" id="dpjpInput" placeholder="Dr. Dr. Luthfi Parewangi, Sp.PD" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">Dokter Muda Pemegang Pasien</label>
-                        <input type="text" id="koasInput" value="Cecy Anggriani" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">Notes Khusus Jaga / Instruksi Ronde</label>
-                        <input type="text" id="notesJaga" placeholder="Selesaikan nyanyian dengan CPPT terbaru..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none">
-                    </div>
-                </div>
             </div>
 
-            <!-- Section B: Subjective (S) -->
+            <!-- SOAP Form -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
                 <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border border-rose-100">
-                    B. SUBJECTIVE (S) — RIWAYAT & FAKTOR RISIKO
+                    B. CATATAN CPPT (S - O - A - P)
                 </h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     <div>
-                        <label class="block font-bold text-gray-700 mb-1">Keluhan Shift Ini / Ronde Hari Ini</label>
-                        <textarea id="valS_Shift" rows="2" placeholder="Nyeri dada berkurang, sesak napas minimal saat aktivitas..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                        <label class="block font-bold text-gray-700 mb-1">S - Subjective</label>
+                        <textarea id="valS_Shift" rows="2" placeholder="Tuliskan keluhan pasien..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none"></textarea>
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-700 mb-1">Keluhan Masuk RS (Onset Awal)</label>
-                        <textarea id="valS_Awal" rows="2" placeholder="Nyeri dada tembus ke belakang sejak 3 jam SMRS..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                        <label class="block font-bold text-gray-700 mb-1">O - Objective (Vital Signs)</label>
+                        <textarea id="valO" rows="2" placeholder="TD, Nadi, Suhu, SpO2..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none"></textarea>
                     </div>
                 </div>
-
-                <div class="border-t pt-3">
-                    <label class="block text-xs font-bold text-gray-700 mb-2">Riwayat Penyakit Dahulu (RPD) & Faktor Risiko Komorbid:</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <input type="text" id="rpdHT" placeholder="Hipertensi (+/terkontrol)" class="bg-gray-50 border rounded-lg p-2">
-                        <input type="text" id="rpdDM" placeholder="Diabetes Melitus (+/OAD)" class="bg-gray-50 border rounded-lg p-2">
-                        <input type="text" id="rpdJantung" placeholder="Penyakit Jantung (+/stent)" class="bg-gray-50 border rounded-lg p-2">
-                        <input type="text" id="rpdAlergi" placeholder="Alergi Obat / Operasi (-)" class="bg-gray-50 border rounded-lg p-2">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section C: Objective (O) -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
-                <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border border-rose-100">
-                    C. OBJECTIVE (O) — TANDA VITAL & STATUS GENERALISATA TERPERINCI
-                </h3>
-
-                <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 text-xs">
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">KU / Kesadaran</label>
-                        <input type="text" id="vKU" placeholder="Sakit Sedang / CM" class="w-full bg-gray-50 border rounded-lg p-2">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">GCS / Skala Nyeri</label>
-                        <input type="text" id="vGCS" placeholder="E4V5M6 (15) / NRS 3" class="w-full bg-gray-50 border rounded-lg p-2">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">TD (mmHg)</label>
-                        <input type="text" id="vTD" placeholder="120/80" class="w-full bg-gray-50 border rounded-lg p-2">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">Nadi (x/menit)</label>
-                        <input type="text" id="vNadi" placeholder="88 (Reguler)" class="w-full bg-gray-50 border rounded-lg p-2">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">Pernapasan (x/m)</label>
-                        <input type="text" id="vNapas" placeholder="20" class="w-full bg-gray-50 border rounded-lg p-2">
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-gray-600 mb-1">Suhu (°C) / SpO2</label>
-                        <input type="text" id="vSuhuSpo2" placeholder="36.5 °C / 98% RA" class="w-full bg-gray-50 border rounded-lg p-2">
-                    </div>
-                </div>
-
-                <div class="border-t pt-3">
-                    <label class="block text-xs font-bold text-gray-700 mb-2">Pemeriksaan Fisik Generalisata & Thorax Terperinci:</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
-                        <input type="text" id="pfKepala" placeholder="Kepala/Mata: CA (-/-), SI (-/-)" class="bg-gray-50 border rounded-lg p-2">
-                        <input type="text" id="pfLeher" placeholder="Leher: JVP R+2 cmH2O" class="bg-gray-50 border rounded-lg p-2">
-                        <input type="text" id="pfThorax" placeholder="Thorax: Cor S1/S2 reg, Pulmo vesikuler" class="bg-gray-50 border rounded-lg p-2">
-                        <input type="text" id="pfAbdomen" placeholder="Abdomen & Ext: Supel, Edema (-/-)" class="bg-gray-50 border rounded-lg p-2">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section D: Pemeriksaan Penunjang Rinci -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
-                <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border border-rose-100">
-                    D. PEMERIKSAAN PENUNJANG (EKG, LAB & CITRA DIAGNOSTIK)
-                </h3>
-
-                <!-- EKG 12 Lead -->
-                <div class="p-3 bg-gray-50 rounded-xl border space-y-2">
-                    <label class="block text-xs font-bold text-rose-900">📈 Parameter Elektrokardiogram (EKG 12-Sadapan):</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <input type="text" id="ekgIrama" placeholder="Irama: Sinus Rhythm" class="bg-white border rounded p-1.5">
-                        <input type="text" id="ekgHR" placeholder="HR: 80 bpm" class="bg-white border rounded p-1.5">
-                        <input type="text" id="ekgAxis" placeholder="Axis: Normoaxis" class="bg-white border rounded p-1.5">
-                        <input type="text" id="ekgST" placeholder="ST-T: Isoclectric / ST-Elevasi" class="bg-white border rounded p-1.5">
-                    </div>
-                    <input type="text" id="ekgKesan" placeholder="Kesan EKG: Sinus Rhythm 80 bpm, normoaxis, T-Inverted lead V1-V4..." class="w-full bg-white border rounded p-2 text-xs font-medium">
-                </div>
-
-                <!-- Panel Lab -->
-                <div class="p-3 bg-gray-50 rounded-xl border space-y-2">
-                    <label class="block text-xs font-bold text-rose-900">🧪 Panel Laboratorium Lengkap:</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
-                        <input type="text" id="labWBC" placeholder="WBC (10^3/uL)" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labRBC" placeholder="RBC / Hb (g/dL)" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labPLT" placeholder="PLT (10^3/uL)" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labGDS" placeholder="GDS (mg/dL)" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labEnzim" placeholder="Troponin / CK-MB" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labUrCr" placeholder="Ureum / Kreatinin" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labElect" placeholder="Elektrolit (Na/K/Cl)" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labSGOT" placeholder="OT/PT / Albumin" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labProfilLp" placeholder="Profil Lipid (Chol/LDL)" class="bg-white border rounded p-1.5">
-                        <input type="text" id="labLain" placeholder="Lab Penunjang Lain" class="bg-white border rounded p-1.5">
-                    </div>
-                </div>
-
-                <!-- Radiologi / Citra -->
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 mb-1">📷 Citra Penunjang Lain (ECHO, Ro Thorax, CT Scan, Cathlab, dll.):</label>
-                    <textarea id="valPenunjangLain" rows="2" placeholder="Foto Thorax: CTR 55%, Infiltrat (-). ECHO: LVEF 52%, Akinesis Anterior..." class="w-full bg-gray-50 border rounded-xl p-2.5 text-xs font-medium outline-none"></textarea>
-                </div>
-            </div>
-
-            <!-- Section E & F: Assessment & Planning -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 space-y-4">
-                <h3 class="text-xs font-bold text-rose-800 uppercase tracking-wider bg-rose-50 p-2.5 rounded-xl border border-rose-100">
-                    E & F. ASSESSMENT (A) & PLANNING (P)
-                </h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                     <div>
-                        <label class="block font-bold text-gray-700 mb-1">A - Assessment / Diagnosis Kerja (ICD-10)</label>
-                        <textarea id="valA" rows="3" placeholder="1. CAD 2 VD S/P PCI 1 Stent di LAD&#10;2. ADHF Fc II-III ec. Ischemic Heart Disease&#10;3. Hipertensi Grade II" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                        <label class="block font-bold text-gray-700 mb-1">A - Assessment</label>
+                        <textarea id="valA" rows="2" placeholder="Diagnosis..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none"></textarea>
                     </div>
                     <div>
-                        <label class="block font-bold text-gray-700 mb-1">P - Planning Terapi, Monitoring & Edukasi (ICD-9-CM)</label>
-                        <textarea id="valP" rows="3" placeholder="- IVFD NaCl 0.9% 500cc/24j&#10;- Inj. Furosemide 20mg/8j IV&#10;- Aspilet 80mg 1x1, CPG 75mg 1x1&#10;- Monitor TTV & Keluhan Sesak" class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600"></textarea>
+                        <label class="block font-bold text-gray-700 mb-1">P - Plan</label>
+                        <textarea id="valP" rows="2" placeholder="Terapi & Rencana..." class="w-full bg-gray-50 border rounded-xl p-2.5 font-medium outline-none"></textarea>
                     </div>
                 </div>
 
                 <button onclick="generateWAReport()" class="w-full py-3 bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs rounded-xl shadow transition">
-                    📤 Generate Format Laporan WhatsApp / CPPT Resume
+                    📤 Generate Format Laporan WhatsApp
                 </button>
             </div>
 
-            <!-- Output Preview WA -->
             <div id="outputContainer" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 hidden">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-xs font-bold text-gray-800">📋 Teks CPPT / Laporan Ronde Siap Salin:</h3>
-                    <button onclick="copyWA()" class="bg-rose-100 text-rose-800 font-bold text-[11px] px-3 py-1 rounded-lg hover:bg-rose-200">Salin Teks</button>
-                </div>
-                <textarea id="outputWA" rows="12" readonly class="w-full text-xs font-mono bg-gray-50 border rounded-xl p-3 text-gray-800"></textarea>
+                <textarea id="outputWA" rows="8" readonly class="w-full text-xs font-mono bg-gray-50 border rounded-xl p-3 text-gray-800"></textarea>
             </div>
         </section>
 
         <!-- TAB 3: CLINICAL CALCULATOR & SCORES PER STASE -->
-        <section id="tabScore" class="space-y-4 hidden">
+        <section id="tabScore" class="space-y-4">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b">
                     <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                        🧮 Calculator & Clinical Scores (<span id="scoreStaseTitle">Kardiologi</span>)
+                        🧮 Calculator & Clinical Scores (<span id="scoreStaseTitle">Penyakit Dalam (IPD)</span>)
                     </h2>
                     <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200">Integrasi 16 Stase</span>
                 </div>
 
                 <div id="scoreCardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Score Cards generated via JavaScript -->
+                    <!-- Cards will be dynamically inserted -->
                 </div>
             </div>
         </section>
@@ -386,13 +238,13 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
                 <div class="flex justify-between items-center mb-4 pb-2 border-b">
                     <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                        📌 Daftar Tugas Stase (<span id="taskStaseTitle">Kardiologi</span>)
+                        📌 Daftar Tugas Stase (<span id="taskStaseTitle">Penyakit Dalam (IPD)</span>)
                     </h2>
                     <span class="text-xs font-semibold text-gray-500" id="taskCount">0 Tugas</span>
                 </div>
 
                 <div class="flex gap-2 mb-4">
-                    <input type="text" id="newTaskInput" placeholder="Tambah tugas baru stase ini..." class="flex-1 text-xs bg-gray-50 border rounded-xl px-3 py-2.5 font-medium outline-none focus:ring-2 focus:ring-rose-600">
+                    <input type="text" id="newTaskInput" placeholder="Tambah tugas baru..." class="flex-1 text-xs bg-gray-50 border rounded-xl px-3 py-2.5 font-medium outline-none">
                     <button onclick="addTask()" class="bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow">Tambah</button>
                 </div>
 
@@ -402,12 +254,30 @@
 
     </main>
 
+    <!-- MODAL KALKULATOR SKOR MEDIS KLINIS INTERAKTIF -->
+    <div id="calcModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-rose-700 text-white p-4 flex justify-between items-center">
+                <h3 id="modalScoreTitle" class="text-sm font-bold">Kalkulator Skor Medis</h3>
+                <button onclick="closeModal()" class="text-white hover:bg-white/20 rounded-lg text-xs font-bold px-2 py-1">✕ Tutup</button>
+            </div>
+            
+            <div id="modalScoreBody" class="p-5 overflow-y-auto space-y-3 text-xs">
+                <!-- Form Kalkulator Pilihan -->
+            </div>
+
+            <div class="bg-rose-50 p-4 border-t border-rose-100 flex justify-between items-center">
+                <span class="text-xs font-bold text-gray-700">Hasil Evaluasi:</span>
+                <span id="modalScoreResult" class="text-sm font-black text-rose-700">Skor: 0 (Normal)</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-white border-t py-4 text-center text-xs text-gray-500 mt-auto">
-        &copy; 2026 MedLog Pro &bull; Fakultas Kedokteran Universitas Muslim Indonesia (UMI).
+        &copy; 2026 MedLog Pro &bull; Universitas Muslim Indonesia (UMI).
     </footer>
 
-    <!-- JavaScript Master Engine -->
     <script>
         const staseMaster = {
             penyakit_dalam: {
@@ -418,82 +288,82 @@
             bedah: {
                 name: "Bedah",
                 scores: ["ASA Physical Status", "Alvarado Score", "Caprini Score", "RCRI (Revised Cardiac Risk)", "APACHE II", "POSSUM"],
-                tasks: ["Asistensi Operasi Appendektomi", "Follow-Up Pasien Post-Op Hernia", "Laporan Kasus Ileus Obstruktif", "Presentasi Journal Bedah"]
+                tasks: ["Asistensi Operasi Appendektomi", "Follow-Up Pasien Post-Op Hernia", "Laporan Kasus Ileus Obstruktif"]
             },
             neurologi: {
                 name: "Neurologi / Saraf",
                 scores: ["GCS (Glasgow Coma Scale)", "NIHSS (NIH Stroke Scale)", "Modified Rankin Scale (mRS)", "ABCD² Score", "Hunt and Hess Scale", "WFNS Scale", "ICH Score", "Fisher Scale", "ASPECTS", "FOUR Score"],
-                tasks: ["Pemeriksaan Saraf Kranialis I-XII", "Hitung Skor NIHSS Stroke Iskemik", "Refleks Patologis & Fisiologis", "Laporan Kasus Meningitis / Epilepsy"]
+                tasks: ["Pemeriksaan Saraf Kranialis I-XII", "Hitung Skor NIHSS Stroke Iskemik", "Refleks Patologis & Fisiologis"]
             },
             kardiologi: {
                 name: "Kardiologi & Vaskuler",
                 scores: ["HEART Score", "TIMI Score", "GRACE Score", "CHA₂DS₂-VASc", "HAS-BLED", "Killip Classification", "NYHA Classification", "Framingham Criteria"],
-                tasks: ["Interpretasi EKG 12 Sadapan", "Laporan Kasus STEMI Inferior / ADHF", "Bedside Teaching Auskultasi Bising Jantung", "Presentasi Journal Kardiologi"]
+                tasks: ["Interpretasi EKG 12 Sadapan", "Laporan Kasus STEMI Inferior / ADHF"]
             },
             pulmonologi: {
                 name: "Pulmonologi / Paru",
                 scores: ["CURB-65", "PSI/PORT Score", "Wells Score for PE", "PERC Rule", "GOLD Classification", "mMRC Dyspnea Scale", "Borg Dyspnea Scale"],
-                tasks: ["Pembacaan Foto Thorax TB Paru / Efusi", "Follow-Up Pasien PPOK Eksaserbasi", "Laporan Kasus Pneumothorax", "Diskusi Analisis Gas Darah (AGD)"]
+                tasks: ["Pembacaan Foto Thorax TB Paru", "Follow-Up Pasien PPOK Eksaserbasi"]
             },
             obgyn: {
                 name: "Obstetri & Ginekologi",
                 scores: ["Bishop Score", "MEOWS", "APGAR Score", "Robson Classification"],
-                tasks: ["Pemeriksaan Leopold I-IV & DJJ", "Evaluasi Partograf Persalinan", "Laporan Kasus PEB / KET", "Follow-Up Post Partum Spontan"]
+                tasks: ["Pemeriksaan Leopold I-IV & DJJ", "Evaluasi Partograf Persalinan"]
             },
             anak: {
                 name: "Ilmu Kesehatan Anak",
                 scores: ["APGAR Score", "Pediatric GCS", "PEWS (Pediatric Early Warning)", "PRISM Score", "Pediatric SOFA"],
-                tasks: ["Hitung Dosis Obat & Resusitasi Cairan Anak", "Penilaian Tumbuh Tumbuh (Z-Score)", "Follow-Up Pasien DHF / Bronkopneumonia", "Laporan Kasus Kejang Demam"]
+                tasks: ["Hitung Dosis Obat & Resusitasi Cairan Anak", "Penilaian Tumbuh Tumbuh (Z-Score)"]
             },
             psikiatri: {
                 name: "Psikiatri / Jiwa",
                 scores: ["PHQ-9 (Depresi)", "GAD-7 (Ansietas)", "CAM (Delirium)", "MMSE", "MoCA-INA"],
-                tasks: ["Pemeriksaan Status Mental Rinci", "Klasifikasi Diagnosis PPDGJ-III / DSM-5", "Laporan Kasus Skizofrenia Haliusilasi", "Autoanamnesis & Alloanamnesis Pasien"]
+                tasks: ["Pemeriksaan Status Mental Rinci", "Klasifikasi Diagnosis PPDGJ-III / DSM-5"]
             },
             anestesi: {
                 name: "Anestesi & ICU",
-                scores: ["ASA Physical Status", "Mallampati Classification", "RASS (Ramsay Sedation)", "Aldrete Score", "Apfel Score", "Ramsay Sedation Scale"],
-                tasks: ["Evaluasi Jalan Napas / Intubasi", "Perhitungan Cairan Resusitasi", "Follow-Up Pasien ICU / Ventilator", "Laporan Kasus General Anesthesia"]
+                scores: ["ASA Physical Status", "Mallampati Classification", "RASS (Ramsay Sedation)", "Aldrete Score", "Apfel Score"],
+                tasks: ["Evaluasi Jalan Napas / Intubasi", "Perhitungan Cairan Resusitasi"]
             },
             forensik: {
                 name: "Forensik & Medikolegal",
                 scores: ["Glasgow Coma Scale (GCS)", "Injury Severity Score (ISS)", "Abbreviated Injury Scale (AIS)", "Revised Trauma Score (RTS)"],
-                tasks: ["Pembuatan Visum et Repertum (VeR)", "Deskripsi Luka & Trauma Tumpul/Tajam", "Diskusi Tanatologi & Autopsi", "Laporan Kasus Medikolegal"]
+                tasks: ["Pembuatan Visum et Repertum (VeR)", "Deskripsi Luka & Trauma Tumpul/Tajam"]
             },
             kulit: {
                 name: "Kulit & Kelamin (DV)",
                 scores: ["PASI (Psoriasis Area)", "SCORAD (Atopic Dermatitis)", "EASI", "DLQI"],
-                tasks: ["Deskripsi Efloresensi Kulit", "Pemeriksaan Gram & KOH 10%", "Laporan Kasus Dermatitis / Sifilis", "Journal Reading Dermato-Venerologi"]
+                tasks: ["Deskripsi Efloresensi Kulit", "Pemeriksaan Gram & KOH 10%"]
             },
             mata: {
                 name: "Mata (Oftalmologi)",
                 scores: ["LogMAR Visual Acuity", "ETDRS Visual Acuity", "Clinical Activity Score (CAS)"],
-                tasks: ["Pemeriksaan Visus & Tonometri Schiotz", "Pemeriksaan Slit Lamp & Funduskopi", "Laporan Kasus Katarak / Glaukoma", "Bedside Teaching Refraksi"]
+                tasks: ["Pemeriksaan Visus & Tonometri Schiotz", "Pemeriksaan Slit Lamp & Funduskopi"]
             },
             tht: {
                 name: "THT-KL",
                 scores: ["Mallampati Classification", "House-Brackmann Scale", "Glasgow Coma Scale (GCS)"],
-                tasks: ["Pemeriksaan Otoskopi & Audiometri", "Tes Penala (Rinne, Weber, Schwabach)", "Laporan Kasus Otitis Media / Tonsilitis", "Evaluasi Parese N. VII"]
+                tasks: ["Pemeriksaan Otoskopi & Audiometri", "Tes Penala (Rinne, Weber, Schwabach)"]
             },
             ortopedi: {
                 name: "Ortopedi & Traumatologi",
                 scores: ["Gustilo-Anderson", "Garden Classification", "Salter-Harris Classification", "Glasgow Coma Scale (GCS)"],
-                tasks: ["Deskripsi Buka/Tutup Fraktur Ekstremitas", "Pemasangan Bidai & Gips", "Laporan Kasus Open Fracture Femur", "Follow-Up Post-ORIF"]
+                tasks: ["Deskripsi Buka/Tutup Fraktur Ekstremitas", "Pemasangan Bidai & Gips"]
             },
             radiologi: {
                 name: "Radiologi & Imaging",
                 scores: ["BI-RADS", "TI-RADS", "LI-RADS", "PI-RADS", "Lung-RADS", "ASPECTS", "Fisher Scale"],
-                tasks: ["Expertise X-Ray Thorax & Abdomen", "Interpretasi CT Scan Kepala non-Kontras", "Prosedur Barium Enema & Ultrasonografi", "Presentasi Ekspertise Radiologi"]
+                tasks: ["Expertise X-Ray Thorax & Abdomen", "Interpretasi CT Scan Kepala non-Kontras"]
             },
             onkologi: {
                 name: "Onkologi",
-                scores: ["ECOG Performance Status", "Karnofsky Performance (KPS)", "TNM Classification", "RECIST Criteria", "WHO CNS Tumor", "Simpson Grading"],
-                tasks: ["Staging Tumor Berdasarkan TNM System", "Follow-Up Pasien Kemoterapi / Radioterapi", "Laporan Kasus Ca Mammae / Ca Cervix", "Evaluasi Respons Terapi RECIST"]
+                scores: ["ECOG Performance Status", "Karnofsky Performance (KPS)", "TNM Classification", "RECIST Criteria"],
+                tasks: ["Staging Tumor Berdasarkan TNM System", "Follow-Up Pasien Kemoterapi / Radioterapi"]
             }
         };
 
-        let currentStase = 'kardiologi';
-        let currentTasks = [...staseMaster.kardiologi.tasks];
+        let currentStase = 'penyakit_dalam';
+        let currentTasks = [...staseMaster.penyakit_dalam.tasks];
 
         function changeStase() {
             currentStase = document.getElementById('staseSelector').value;
@@ -546,20 +416,110 @@
 
             scores.forEach(scoreName => {
                 container.innerHTML += `
-                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-3">
+                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200 flex flex-col justify-between space-y-3 shadow-sm hover:shadow transition">
                         <div>
                             <div class="flex justify-between items-start">
                                 <h4 class="text-xs font-bold text-gray-900">${scoreName}</h4>
                                 <span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded">Clinical Score</span>
                             </div>
-                            <p class="text-[11px] text-gray-500 mt-1">Kalkulator & Parameter Evaluasi Kategori Stase ${staseMaster[currentStase].name}.</p>
+                            <p class="text-[11px] text-gray-500 mt-1">Modul kalkulator & evaluasi kriteria klinis ${scoreName}.</p>
                         </div>
-                        <button onclick="alert('Membuka modul hitung ${scoreName}')" class="w-full py-2 bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold rounded-lg transition shadow">
+                        <button onclick="openScoreModal('${scoreName}')" class="w-full py-2 bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold rounded-lg transition shadow">
                             Hitung / Evaluasi ${scoreName}
                         </button>
                     </div>
                 `;
             });
+        }
+
+        function openScoreModal(scoreName) {
+            const modal = document.getElementById('calcModal');
+            const title = document.getElementById('modalScoreTitle');
+            const body = document.getElementById('modalScoreBody');
+            const result = document.getElementById('modalScoreResult');
+
+            title.innerText = `Kalkulator Skor: ${scoreName}`;
+            modal.classList.remove('hidden');
+
+            if (scoreName === 'SOFA' || scoreName === 'qSOFA') {
+                body.innerHTML = `
+                    <div>
+                        <label class="block font-semibold mb-1">Pernapasan (P/F Ratio atau Respiration Rate):</label>
+                        <select id="sofa1" onchange="calcSOFA()" class="w-full bg-gray-50 border rounded p-2">
+                            <option value="0">P/F > 400 atau RR ≤ 21 x/menit (0 Poin)</option>
+                            <option value="1">P/F < 400 atau RR > 22 x/menit (1 Poin)</option>
+                            <option value="2">P/F < 300 (2 Poin)</option>
+                            <option value="3">P/F < 200 dengan Bantuan Ventilator (3 Poin)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold mb-1">Kardiovaskular (Tekanan Darah MAP):</label>
+                        <select id="sofa2" onchange="calcSOFA()" class="w-full bg-gray-50 border rounded p-2">
+                            <option value="0">MAP ≥ 70 mmHg (0 Poin)</option>
+                            <option value="1">MAP < 70 mmHg / Sepsis Ringan (1 Poin)</option>
+                            <option value="2">Dopamine ≤ 5 mcg/kg/min (2 Poin)</option>
+                            <option value="3">Dopamine > 5 mcg/kg/min (3 Poin)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-1">Glasgow Coma Scale (GCS):</label>
+                        <select id="sofa3" onchange="calcSOFA()" class="w-full bg-gray-50 border rounded p-2">
+                            <option value="0">GCS 15 (0 Poin)</option>
+                            <option value="1">GCS 13 - 14 (1 Poin)</option>
+                            <option value="2">GCS 10 - 12 (2 Poin)</option>
+                            <option value="3">GCS < 10 (3 Poin)</option>
+                        </select>
+                    </div>
+                `;
+                calcSOFA();
+            } else if (scoreName.includes('GCS')) {
+                body.innerHTML = `
+                    <div><label class="block font-semibold">Respon Membuka Mata (Eye):</label><select id="gE" onchange="calcGCSModal()" class="w-full bg-gray-50 border rounded p-2"><option value="4">4 - Spontan</option><option value="3">3 - Suara</option><option value="2">2 - Nyeri</option><option value="1">1 - Tidak ada</option></select></div>
+                    <div><label class="block font-semibold">Respon Verbal:</label><select id="gV" onchange="calcGCSModal()" class="w-full bg-gray-50 border rounded p-2"><option value="5">5 - Orientasi Baik</option><option value="4">4 - Bingung</option><option value="3">3 - Kata Tak Jelas</option><option value="2">2 - Mengerang</option><option value="1">1 - Tidak ada</option></select></div>
+                    <div><label class="block font-semibold">Respon Motorik:</label><select id="gM" onchange="calcGCSModal()" class="w-full bg-gray-50 border rounded p-2"><option value="6">6 - Ikut Perintah</option><option value="5">5 - Lokalisir Nyeri</option><option value="4">4 - Menghindari Nyeri</option><option value="3">3 - Fleksi Anormal</option><option value="2">2 - Ekstensi Anormal</option><option value="1">1 - Tidak ada</option></select></div>
+                `;
+                calcGCSModal();
+            } else {
+                body.innerHTML = `
+                    <p class="text-gray-600">Modul kalkulasi cepat ${scoreName} aktif. Pilih parameter pasien di bawah ini:</p>
+                    <div>
+                        <label class="block font-semibold mb-1">Kategori / Derajat Keparahan Patient:</label>
+                        <select id="genericScore" onchange="calcGeneric('${scoreName}')" class="w-full bg-gray-50 border rounded p-2">
+                            <option value="Low Risk / Normal">Kriteria Risiko Rendah / Normal</option>
+                            <option value="Moderate Risk">Kriteria Risiko Sedang</option>
+                            <option value="High Risk / Severe">Kriteria Risiko Tinggi / Severe</option>
+                        </select>
+                    </div>
+                `;
+                calcGeneric(scoreName);
+            }
+        }
+
+        function calcSOFA() {
+            const v1 = parseInt(document.getElementById('sofa1').value);
+            const v2 = parseInt(document.getElementById('sofa2').value);
+            const v3 = parseInt(document.getElementById('sofa3').value);
+            const total = v1 + v2 + v3;
+            let ket = "Risiko Sepsis Rendah";
+            if (total >= 2) ket = "Risiko Organ Dysfunction / Sepsis Tinggi";
+            document.getElementById('modalScoreResult').innerText = `Total Skor: ${total} (${ket})`;
+        }
+
+        function calcGCSModal() {
+            const e = parseInt(document.getElementById('gE').value);
+            const v = parseInt(document.getElementById('gV').value);
+            const m = parseInt(document.getElementById('gM').value);
+            const total = e + v + m;
+            document.getElementById('modalScoreResult').innerText = `GCS: E${e}V${v}M${m} (${total}) - ${total === 15 ? 'Compos Mentis' : 'Penurunan Kesadaran'}`;
+        }
+
+        function calcGeneric(name) {
+            const val = document.getElementById('genericScore').value;
+            document.getElementById('modalScoreResult').innerText = `Hasil Evaluasi ${name}: ${val}`;
+        }
+
+        function closeModal() {
+            document.getElementById('calcModal').classList.add('hidden');
         }
 
         function switchTab(tab) {
@@ -593,67 +553,25 @@
             const ruang = document.getElementById('ruangBed').value || '-';
             const pasien = document.getElementById('namaPasien').value || '(Nama Pasien)';
             const rmUsia = document.getElementById('rmUsia').value || '-';
-            const dpjp = document.getElementById('dpjpInput').value || '-';
-            const koas = document.getElementById('koasInput').value || 'Cecy Anggriani';
 
             const sShift = document.getElementById('valS_Shift').value || '-';
-            const sAwal = document.getElementById('valS_Awal').value || '-';
-            const ku = document.getElementById('vKU').value || '-';
-            const gcs = document.getElementById('vGCS').value || '-';
-            const td = document.getElementById('vTD').value || '-';
-            const nadi = document.getElementById('vNadi').value || '-';
-            const napas = document.getElementById('vNapas').value || '-';
-            const suhuSpo2 = document.getElementById('vSuhuSpo2').value || '-';
-
-            const ekg = document.getElementById('ekgKesan').value || '-';
-            const labWBC = document.getElementById('labWBC').value || '-';
-            const labRBC = document.getElementById('labRBC').value || '-';
-            const labPLT = document.getElementById('labPLT').value || '-';
-            const labGDS = document.getElementById('labGDS').value || '-';
-            const citra = document.getElementById('valPenunjangLain').value || '-';
-
+            const valO = document.getElementById('valO').value || '-';
             const a = document.getElementById('valA').value || '-';
             const p = document.getElementById('valP').value || '-';
 
-            const report = `*LAPORAN CPPT TERPERINCI — STASE ${staseMaster[currentStase].name.toUpperCase()}*
+            const report = `*LAPORAN CPPT — STASE ${staseMaster[currentStase].name.toUpperCase()}*
 🏥 *${rs}* (${ruang})
 👤 *Pasien:* ${pasien} (${rmUsia})
-👨‍⚕️ *DPJP:* ${dpjp} | *Dokter Muda:* ${koas}
 
------------------------------------
-📝 *SUBJECTIVE (S):*
-• *Keluhan Ronde:* ${sShift}
-• *Onset Masuk RS:* ${sAwal}
+S: ${sShift}
+O: ${valO}
+A: ${a}
+P: ${p}
 
-📊 *OBJECTIVE (O) - VITAL SIGNS & PEMFIS:*
-• *KU/Kesadaran:* ${ku} | *GCS/NRS:* ${gcs}
-• *TD:* ${td} mmHg | *Nadi:* ${nadi} x/m
-• *Pernapasan:* ${napas} x/m | *Suhu/SpO2:* ${suhuSpo2}
-
-🔬 *PEMERIKSAAN PENUNJANG:*
-• *EKG 12-Lead:* ${ekg}
-• *Lab Utama:* WBC: ${labWBC} | Hb/RBC: ${labRBC} | PLT: ${labPLT} | GDS: ${labGDS}
-• *Citra Diagnostic:* ${citra}
-
-🏥 *ASSESSMENT (A):*
-${a}
-
-📋 *PLANNING (P):*
-${p}
-
------------------------------------
-_Terkirim otomatis via MedLog Pro FK UMI_`;
+_Terkirim via MedLog Pro @CecyAnggriani_`;
 
             document.getElementById('outputContainer').classList.remove('hidden');
             document.getElementById('outputWA').value = report;
-            document.getElementById('outputContainer').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function copyWA() {
-            const text = document.getElementById('outputWA');
-            text.select();
-            document.execCommand('copy');
-            alert('Teks CPPT terperinci berhasil disalin!');
         }
 
         // Initialize
